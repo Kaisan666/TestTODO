@@ -160,6 +160,16 @@
   color: var(--on-accent);
 }
 
+.btn--plain {
+  background: transparent;
+  color: var(--muted);
+}
+
+.btn--plain:hover {
+  background: var(--surface-hover);
+  color: var(--text);
+}
+
 .btn--sm {
   padding: 7px 12px;
   font-size: 14px;
@@ -303,7 +313,7 @@
   gap: 10px;
 }
 
-.composer__steps {
+.step-fields {
   display: grid;
   gap: 8px;
   margin: 0;
@@ -311,13 +321,13 @@
   list-style: none;
 }
 
-.composer__step {
+.step-fields__item {
   display: flex;
   align-items: center;
   gap: 8px;
 }
 
-.composer__num {
+.step-fields__num {
   flex: none;
   width: 24px;
   font-size: 13px;
@@ -327,7 +337,7 @@
   color: var(--muted);
 }
 
-.composer__add-step {
+.step-fields__add {
   justify-self: start;
 }
 
@@ -358,7 +368,8 @@
     background-color 0.2s;
 }
 
-.task.is-open {
+.task.is-open,
+.task.is-editing {
   border-color: var(--open-border);
   box-shadow:
     var(--shadow),
@@ -536,6 +547,20 @@
   padding-left: 8px;
 }
 
+/* ---------- Редактирование задачи ---------- */
+
+.task-edit {
+  display: grid;
+  gap: 12px;
+  padding: 16px;
+}
+
+.task-edit__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
 /* ---------- Пустое состояние ---------- */
 
 .empty {
@@ -585,7 +610,12 @@
   }
 
   .task__header {
+    gap: 2px;
     padding-left: 12px;
+  }
+
+  .task__header .icon-btn {
+    width: 32px;
   }
 
   .task__toggle {

@@ -1,11 +1,12 @@
 import { useEffect, useMemo, useReducer } from 'react'
 import { readJSON, writeJSON } from '../lib/storage'
-import type { Step, Task } from '../types'
+import type { Step, StepDraft, Task } from '../types'
 
 const STORAGE_KEY = 'todo:tasks'
 
 type Action =
   | { type: 'addTask'; task: Task }
+  | { type: 'editTask'; id: string; title: string; steps: StepDraft[] }
   | { type: 'toggleTask'; id: string }
   | { type: 'removeTask'; id: string }
   | { type: 'addStep'; taskId: string; step: Step }
@@ -25,6 +26,16 @@ function reducer(tasks: Task[], action: Action): Task[] {
   switch (action.type) {
     case 'addTask':
       return [action.task, ...tasks]
+    case 'editTask':
+      return updateTask(tasks, action.id, (task) => {
+        // Отметки сохраняем у пунктов, которые остались после редактирования
+        const doneById = new Map(task.steps.map((s) => [s.id, s.done]))
+        return syncDone({
+          ...task,
+          title: action.title,
+          steps: action.steps.map((s) => ({ ...s, done: doneById.get(s.id) ?? false })),
+        })
+      })
     case 'toggleTask':
       return updateTask(tasks, action.id, (task) => {
         const done = !task.done
@@ -88,6 +99,13 @@ export function useTasks() {
         dispatch({
           type: 'addTask',
           task: { id: crypto.randomUUID(), title, done: false, steps: steps.map(createStep) },
+        }),
+      editTask: (id: string, title: string, steps: StepDraft[]) =>
+        dispatch({
+          type: 'editTask',
+          id,
+          title,
+          steps: steps.map((s) => ({ id: s.id || crypto.randomUUID(), text: s.text })),
         }),
       toggleTask: (id: string) => dispatch({ type: 'toggleTask', id }),
       removeTask: (id: string) => dispatch({ type: 'removeTask', id }),

@@ -10,3 +10,6 @@ export interface Task {
   done: boolean
   steps: Step[]
 }
+
+/** Пункт из формы редактирования: пустой id — новый пункт */
+export type StepDraft = Pick<Step, 'id' | 'text'>

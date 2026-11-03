@@ -51,6 +51,12 @@ export const TrashIcon = (props: IconProps) => (
   </Icon>
 )
 
+export const PencilIcon = (props: IconProps) => (
+  <Icon {...props}>
+    <path d="M4 20h4L19 9a2.83 2.83 0 0 0-4-4L4 16v4ZM13.5 6.5l4 4" />
+  </Icon>
+)
+
 export const ListIcon = (props: IconProps) => (
   <Icon {...props}>
     <path d="M9 6h11M9 12h11M9 18h11M4 6h.01M4 12h.01M4 18h.01" />
