@@ -1,0 +1,69 @@
+/* Тема Midnight: фон #1B263B, розовые акценты #F72585 */
+:root {
+  color-scheme: dark;
+  --pink: #f72585;
+  --navy: #1b263b;
+  --font-body: 'Manrope', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --bg: var(--navy);
+  --bg-glow: radial-gradient(900px 480px at 50% -160px, rgb(247 37 133 / 0.22), transparent 70%);
+  --surface: #233150;
+  --surface-hover: #2a3a5c;
+  --field: #1b263b;
+  --border: rgb(255 255 255 / 0.08);
+  --border-strong: rgb(255 255 255 / 0.18);
+  --text: #eef1f7;
+  --muted: #8e9ab4;
+  --accent: var(--pink);
+  --accent-hover: #ff3d96;
+  --accent-soft: rgb(247 37 133 / 0.16);
+  --accent-ink: #ff6fae;
+  --on-accent: #fff;
+  --danger: #ff6b6b;
+  --open-border: rgb(247 37 133 / 0.5);
+  --radius: 16px;
+  --radius-sm: 10px;
+  --bw: 1px;
+  --shadow: 0 12px 32px rgb(8 12 22 / 0.35);
+  --shadow-btn: 0 8px 22px rgb(247 37 133 / 0.35);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--text);
+  background: var(--bg-glow) fixed, var(--bg);
+  -webkit-font-smoothing: antialiased;
+}
+
+button,
+input {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  -webkit-tap-highlight-color: transparent;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
