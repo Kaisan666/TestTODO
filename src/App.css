@@ -17,8 +17,6 @@
   flex: none;
 }
 
-/* ---------- Шапка ---------- */
-
 .hero {
   display: flex;
   align-items: flex-end;
@@ -75,8 +73,6 @@
   color: var(--accent);
 }
 
-/* ---------- Поля и кнопки ---------- */
-
 .field {
   width: 100%;
   min-width: 0;
@@ -132,13 +128,13 @@
 }
 
 .btn--primary {
-  background: var(--accent);
+  background: var(--accent-solid);
   color: var(--on-accent);
   box-shadow: var(--shadow-btn);
 }
 
 .btn--primary:hover {
-  background: var(--accent-hover);
+  background: var(--accent-solid-hover);
 }
 
 .btn--ghost {
@@ -156,7 +152,7 @@
 }
 
 .btn--soft:hover {
-  background: var(--accent);
+  background: var(--accent-solid);
   color: var(--on-accent);
 }
 
@@ -218,8 +214,6 @@
   height: 16px;
 }
 
-/* ---------- Чекбокс ---------- */
-
 .check {
   position: relative;
   display: inline-flex;
@@ -245,7 +239,7 @@
   width: 24px;
   height: 24px;
   background: var(--field);
-  border: 2px solid var(--border-strong);
+  border: 2px solid var(--control-border);
   border-radius: 8px;
   color: var(--on-accent);
   transition:
@@ -299,8 +293,6 @@
   transition: color 0.2s;
 }
 
-/* ---------- Форма новой задачи ---------- */
-
 .composer {
   display: grid;
   gap: 12px;
@@ -347,8 +339,6 @@
   font-weight: 600;
   color: var(--danger);
 }
-
-/* ---------- Задачи-аккордеоны ---------- */
 
 .task-list {
   display: grid;
@@ -459,7 +449,6 @@
   transition: width 0.3s ease;
 }
 
-/* Плавное раскрытие через grid-template-rows: 0fr → 1fr */
 .task__body {
   display: grid;
   grid-template-rows: 0fr;
@@ -547,8 +536,6 @@
   padding-left: 8px;
 }
 
-/* ---------- Редактирование задачи ---------- */
-
 .task-edit {
   display: grid;
   gap: 12px;
@@ -560,8 +547,6 @@
   justify-content: flex-end;
   gap: 8px;
 }
-
-/* ---------- Пустое состояние ---------- */
 
 .empty {
   padding: 48px 24px;
@@ -596,8 +581,6 @@
   margin: 0;
   color: var(--muted);
 }
-
-/* ---------- Мобильные ---------- */
 
 @media (max-width: 480px) {
   .btn__text {

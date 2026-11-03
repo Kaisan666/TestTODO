@@ -19,7 +19,6 @@ export function TaskItem({ task, actions }: TaskItemProps) {
   const editButtonRef = useRef<HTMLButtonElement>(null)
   const restoreFocus = useRef(false)
 
-  // После закрытия редактора возвращаем фокус на кнопку «Редактировать»
   useEffect(() => {
     if (!editing && restoreFocus.current) {
       restoreFocus.current = false

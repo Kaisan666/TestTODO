@@ -1,111 +1,43 @@
 import { useEffect, useMemo, useReducer } from 'react'
-import { readJSON, writeJSON } from '../lib/storage'
-import type { Step, StepDraft, Task } from '../types'
+import { createId } from '../lib/id'
+import { writeJSON } from '../lib/storage'
+import { loadTasks, tasksReducer } from '../lib/tasks'
+import type { Step, StepDraft } from '../types'
 
 const STORAGE_KEY = 'todo:tasks'
 
-type Action =
-  | { type: 'addTask'; task: Task }
-  | { type: 'editTask'; id: string; title: string; steps: StepDraft[] }
-  | { type: 'toggleTask'; id: string }
-  | { type: 'removeTask'; id: string }
-  | { type: 'addStep'; taskId: string; step: Step }
-  | { type: 'toggleStep'; taskId: string; stepId: string }
-  | { type: 'removeStep'; taskId: string; stepId: string }
-
-// Задача с пунктами считается выполненной, когда выполнены все её пункты
-function syncDone(task: Task): Task {
-  return task.steps.length > 0 ? { ...task, done: task.steps.every((s) => s.done) } : task
-}
-
-function updateTask(tasks: Task[], id: string, update: (task: Task) => Task) {
-  return tasks.map((task) => (task.id === id ? update(task) : task))
-}
-
-function reducer(tasks: Task[], action: Action): Task[] {
-  switch (action.type) {
-    case 'addTask':
-      return [action.task, ...tasks]
-    case 'editTask':
-      return updateTask(tasks, action.id, (task) => {
-        // Отметки сохраняем у пунктов, которые остались после редактирования
-        const doneById = new Map(task.steps.map((s) => [s.id, s.done]))
-        return syncDone({
-          ...task,
-          title: action.title,
-          steps: action.steps.map((s) => ({ ...s, done: doneById.get(s.id) ?? false })),
-        })
-      })
-    case 'toggleTask':
-      return updateTask(tasks, action.id, (task) => {
-        const done = !task.done
-        return { ...task, done, steps: task.steps.map((s) => ({ ...s, done })) }
-      })
-    case 'removeTask':
-      return tasks.filter((task) => task.id !== action.id)
-    case 'addStep':
-      return updateTask(tasks, action.taskId, (task) =>
-        syncDone({ ...task, steps: [...task.steps, action.step] }),
-      )
-    case 'toggleStep':
-      return updateTask(tasks, action.taskId, (task) =>
-        syncDone({
-          ...task,
-          steps: task.steps.map((s) => (s.id === action.stepId ? { ...s, done: !s.done } : s)),
-        }),
-      )
-    case 'removeStep':
-      return updateTask(tasks, action.taskId, (task) =>
-        syncDone({ ...task, steps: task.steps.filter((s) => s.id !== action.stepId) }),
-      )
-  }
-}
-
-const isObject = (value: unknown): value is Record<string, unknown> =>
-  typeof value === 'object' && value !== null
-
-const isStep = (value: unknown): value is Step =>
-  isObject(value) &&
-  typeof value.id === 'string' &&
-  typeof value.text === 'string' &&
-  typeof value.done === 'boolean'
-
-const isTask = (value: unknown): value is Task =>
-  isObject(value) &&
-  typeof value.id === 'string' &&
-  typeof value.title === 'string' &&
-  typeof value.done === 'boolean' &&
-  Array.isArray(value.steps) &&
-  value.steps.every(isStep)
-
-// В localStorage могут лежать устаревшие или повреждённые данные — берём только валидные задачи
-function loadTasks(key: string): Task[] {
-  const data = readJSON<unknown>(key, [])
-  return Array.isArray(data) ? data.filter(isTask) : []
-}
-
-const createStep = (text: string): Step => ({ id: crypto.randomUUID(), text, done: false })
+const createStep = (text: string): Step => ({ id: createId(), text, done: false })
 
 export function useTasks() {
-  const [tasks, dispatch] = useReducer(reducer, STORAGE_KEY, loadTasks)
+  const [tasks, dispatch] = useReducer(tasksReducer, STORAGE_KEY, loadTasks)
 
   useEffect(() => {
     writeJSON(STORAGE_KEY, tasks)
   }, [tasks])
+
+  useEffect(() => {
+    const onStorage = (e: StorageEvent) => {
+      if (e.key === STORAGE_KEY || e.key === null) {
+        dispatch({ type: 'replace', tasks: loadTasks(STORAGE_KEY) })
+      }
+    }
+    window.addEventListener('storage', onStorage)
+    return () => window.removeEventListener('storage', onStorage)
+  }, [])
 
   const actions = useMemo(
     () => ({
       addTask: (title: string, steps: string[]) =>
         dispatch({
           type: 'addTask',
-          task: { id: crypto.randomUUID(), title, done: false, steps: steps.map(createStep) },
+          task: { id: createId(), title, done: false, steps: steps.map(createStep) },
         }),
       editTask: (id: string, title: string, steps: StepDraft[]) =>
         dispatch({
           type: 'editTask',
           id,
           title,
-          steps: steps.map((s) => ({ id: s.id || crypto.randomUUID(), text: s.text })),
+          steps: steps.map((s) => ({ id: s.id || createId(), text: s.text })),
         }),
       toggleTask: (id: string) => dispatch({ type: 'toggleTask', id }),
       removeTask: (id: string) => dispatch({ type: 'removeTask', id }),

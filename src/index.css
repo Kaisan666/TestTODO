@@ -1,4 +1,3 @@
-/* Тема Midnight: фон #1B263B, розовые акценты #F72585 */
 :root {
   color-scheme: dark;
   --pink: #f72585;
@@ -11,10 +10,12 @@
   --field: #1b263b;
   --border: rgb(255 255 255 / 0.08);
   --border-strong: rgb(255 255 255 / 0.18);
+  --control-border: rgb(255 255 255 / 0.45);
   --text: #eef1f7;
   --muted: #8e9ab4;
   --accent: var(--pink);
-  --accent-hover: #ff3d96;
+  --accent-solid: #d6136c;
+  --accent-solid-hover: #c9135f;
   --accent-soft: rgb(247 37 133 / 0.16);
   --accent-ink: #ff6fae;
   --on-accent: #fff;

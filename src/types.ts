@@ -11,5 +11,4 @@ export interface Task {
   steps: Step[]
 }
 
-/** Пункт из формы редактирования: пустой id — новый пункт */
 export type StepDraft = Pick<Step, 'id' | 'text'>

@@ -10,7 +10,5 @@ export function readJSON<T>(key: string, fallback: T): T {
 export function writeJSON(key: string, value: unknown) {
   try {
     localStorage.setItem(key, JSON.stringify(value))
-  } catch {
-    // Хранилище недоступно или переполнено — приложение продолжает работать без сохранения
-  }
+  } catch {}
 }

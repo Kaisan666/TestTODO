@@ -22,8 +22,8 @@ export function AddTaskForm({ onAdd }: AddTaskFormProps) {
       title.trim(),
       cleanSteps(steps).map((s) => s.text),
     )
-    reset()
     setFocus('title')
+    reset()
   })
 
   return (
@@ -37,7 +37,7 @@ export function AddTaskForm({ onAdd }: AddTaskFormProps) {
           aria-invalid={errors.title ? 'true' : 'false'}
           {...register('title', titleRules)}
         />
-        <button type="submit" className="btn btn--primary">
+        <button type="submit" className="btn btn--primary" aria-label="Добавить задачу">
           <PlusIcon />
           <span className="btn__text">Добавить</span>
         </button>

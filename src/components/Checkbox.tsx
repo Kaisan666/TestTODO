@@ -5,7 +5,6 @@ import { CheckIcon } from './icons'
 interface CheckboxProps {
   checked: boolean
   onChange: () => void
-  /** Подпись для скринридеров, если видимого текста рядом нет */
   label?: string
   size?: 'md' | 'sm'
   children?: ReactNode
